@@ -1,13 +1,17 @@
 import { Box } from "@mui/material";
 import React, { useState } from "react";
 import { Droppable } from "react-drag-and-drop";
+import { useDispatch, useSelector } from "react-redux";
+import { done } from "../redux/state/AddReducer";
 
 const Done = () => {
-  const [smoothieIngredients, setSmoothieIngredients] = useState([]);
-  // console.log(smoothieIngredients);
+  const dispatch = useDispatch();
+  const doneData = useSelector((state) => state.counter.done);
+  console.log("done", doneData);
 
   const onDrop = (data) => {
-    setSmoothieIngredients([...smoothieIngredients, data]);
+    // console.log(data);
+    dispatch(done(data.progresss));
   };
   return (
     <Box
@@ -43,41 +47,42 @@ const Done = () => {
         Done
       </Box>
       <Droppable
-        types={["fruit"]} // <= allowed drop types
+        types={["progresss"]} // <= allowed drop types
         onDrop={onDrop}
         overflowY={"scroll"}
       >
         <Box sx={{ height: "300px" }}>
-          {smoothieIngredients.map((ingredient, index) => (
-            <Box
-              key={index}
-              sx={{
-                border: 1,
-                borderColor: "black",
-                m: 2,
-                py: 1,
-                px: 0.5,
-                backgroundColor: "#dddddd",
-                fontWeight: "semi-bold",
-                fontSize: { xs: "14px", sm: "18px" },
-                overflowX: "scroll",
-                "&::-webkit-scrollbar": {
-                  width: "1px",
+          {doneData?.length > 0 &&
+            doneData.map((data, index) => (
+              <Box
+                key={index}
+                sx={{
+                  border: 1,
+                  borderColor: "black",
+                  m: 2,
+                  py: 1,
+                  px: 0.5,
                   backgroundColor: "#dddddd",
-                },
-                "&::-webkit-scrollbar-thumb": {
-                  borderRadius: "0px",
-                  backgroundColor: "#dddddd",
-                  "&:hover": {
+                  fontWeight: "semi-bold",
+                  fontSize: { xs: "14px", sm: "18px" },
+                  overflowX: "scroll",
+                  "&::-webkit-scrollbar": {
+                    width: "1px",
                     backgroundColor: "#dddddd",
                   },
-                },
-              }}
-            >
-              {" "}
-              {ingredient.fruit}
-            </Box>
-          ))}
+                  "&::-webkit-scrollbar-thumb": {
+                    borderRadius: "0px",
+                    backgroundColor: "#dddddd",
+                    "&:hover": {
+                      backgroundColor: "#dddddd",
+                    },
+                  },
+                }}
+              >
+                {" "}
+                {data}
+              </Box>
+            ))}
         </Box>
       </Droppable>
     </Box>

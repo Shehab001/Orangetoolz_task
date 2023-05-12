@@ -1,10 +1,21 @@
 import { Box, Button, Grid, TextField } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { todo } from "../redux/state/AddReducer";
 import Done from "./Done";
 import InProgress from "./InProgress";
 import Todo from "./Todo";
 
 const Add = () => {
+  const [textFieldValue, setTextFieldValue] = useState("");
+  const dispatch = useDispatch();
+  //  console.log(textFieldValue);
+  const handleTextFieldChange = (event) => {
+    setTextFieldValue(event.target.value);
+  };
+
+  const count = useSelector((state) => state.counter.todo);
+  console.log("hi", count);
   return (
     <>
       <Box
@@ -21,10 +32,12 @@ const Add = () => {
         <Grid container spacing={2} ml={{ xs: -5, sm: 0 }}>
           <Grid item xs={8} textAlign={"end"}>
             <TextField
+              onChange={handleTextFieldChange}
               id="outlined-basic"
               size="small"
               label="Write Your Task ..."
               variant="outlined"
+              name="task"
               sx={{
                 width: "70%",
 
@@ -34,6 +47,7 @@ const Add = () => {
           </Grid>
           <Grid item xs={4}>
             <Button
+              onClick={() => dispatch(todo(textFieldValue))}
               sx={{
                 mt: "2px",
                 borderRadius: "0px",
